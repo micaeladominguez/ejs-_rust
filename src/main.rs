@@ -6,14 +6,14 @@ use std::collections::HashSet;
 pub fn anagrams_for<'a>(word: &str, candidates: &[&'a str]) -> HashSet<&'a str> {
     let word_lower = word.to_lowercase();
     let required_frequencies = letter_frequencies(&word_lower);
-    return candidates.into_iter().cloned().filter(|x| word.chars().all(|ch| x.contains(ch))
+    /*return candidates.into_iter().cloned().filter(|x| word.chars().all(|ch| x.contains(ch))
         && x.chars().all(|ch| word.contains(ch))
         && word.len() == x.len())
-        .collect();
-    /*candidates.iter().cloned().filter(|candidate| {
+        .collect();*/
+    return candidates.iter().cloned().filter(|candidate| {
         let candidate_lower = candidate.to_lowercase();
         candidate_lower != word_lower && letter_frequencies(&candidate_lower) == required_frequencies
-    }).collect()*/
+    }).collect()
 }
 fn letter_frequencies(word: &str) -> HashMap<char, usize> {
     word.chars().fold(HashMap::new(), |mut freqs, c| {
@@ -86,6 +86,7 @@ impl HighScores {
     }
 }
 
+
 //BINARY SEARCH
 use std::cmp::Ordering::{Equal, Less, Greater};
 
@@ -115,25 +116,60 @@ fn copy_and_return<'a>(vector: &'a mut Vec<String>, value: &'a str) -> &'a str {
     value
 }
 
+fn palindrome_number(mut x: i32 ) -> bool {
+    if x < 0 {
+        return false;
+    }
+    let mut digits = Vec::with_capacity(10);
+    while x != 0 {
+        digits.push(x % 10);
+        x /= 10;
+    }
+    for i in 0..(digits.len() / 2) {
+        if digits[i] != digits[digits.len() - i - 1] {
+            return false;
+        }
+    }
+    true
+}
+
+fn is_palindrome<T>(v: &[T]) -> bool
+    where
+        T: Eq,
+{
+    v.iter().eq(v.iter().rev())
+}
+
+fn is_palindrome_vec<T>(v: Vec<T>) -> bool
+    where
+        T: Eq,
+{
+    v.iter().eq(v.iter().rev())
+}
+
+fn is_palindrome_string(x: &str ) -> bool {
+    let phrase : String = String::from(x);
+    let phrase_reverse = reverse(x);
+    return phrase_reverse.eq(&phrase);
+    /*let phrase: Vec<char> = x.chars().collect();
+    return is_palindrome_vec(phrase);*/
+}
+fn is_palindrome_phrase(x: &str) -> bool  {
+    let mut phrase : String = String::from(x);
+    phrase.chars().filter(|c| !c.is_whitespace()).collect();
+    let phrase_reverse = phrase.chars().cloned().into_iter().rev();
+    return split_phrase.eq(&phrase_reverse);
+}
 fn main() {
-    let name1 = "Joe";
-    let name2 = "Chris";
-    let name3 = "Anne";
+    let name1:[u32; 5] = [1,0,1,0,1];
 
-    let mut names = Vec::new();
 
-    assert_eq!("Joe", copy_and_return(&mut names, &name1));
-    assert_eq!("Chris", copy_and_return(&mut names, &name2));
-    assert_eq!("Anne", copy_and_return(&mut names, &name3));
-
-    assert_eq!(
-        names,
-        vec!["Joe".to_string(), "Chris".to_string(), "Anne".to_string()]
-    )
+    println!("{:?}", is_palindrome_phrase("hooh"))
 }
 
 //LINKED LIST
 use std::iter::FromIterator;
+use std::str::SplitWhitespace;
 
 struct Node<T> {
     data: T,
