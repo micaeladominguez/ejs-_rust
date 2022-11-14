@@ -6,10 +6,14 @@ use std::collections::HashSet;
 pub fn anagrams_for<'a>(word: &str, candidates: &[&'a str]) -> HashSet<&'a str> {
     let word_lower = word.to_lowercase();
     let required_frequencies = letter_frequencies(&word_lower);
-    candidates.iter().cloned().filter(|candidate| {
+    return candidates.into_iter().cloned().filter(|x| word.chars().all(|ch| x.contains(ch))
+        && x.chars().all(|ch| word.contains(ch))
+        && word.len() == x.len())
+        .collect();
+    /*candidates.iter().cloned().filter(|candidate| {
         let candidate_lower = candidate.to_lowercase();
         candidate_lower != word_lower && letter_frequencies(&candidate_lower) == required_frequencies
-    }).collect()
+    }).collect()*/
 }
 fn letter_frequencies(word: &str) -> HashMap<char, usize> {
     word.chars().fold(HashMap::new(), |mut freqs, c| {
